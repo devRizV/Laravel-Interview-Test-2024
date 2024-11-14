@@ -33,9 +33,9 @@ class City extends Model
     }
 
     /**
-     * 
      * Generate a unique slug for a state.
-     *
+     * @param string
+     * @return string
      */
 
     protected function generateUniqueSlug($name)

@@ -1,0 +1,10 @@
+import './jquery-3.6.0.min.js';
+import './jquery-migrate.min.js';
+import './bootstrap.bundle.min.js';
+import './slick.js';
+import './plugin.js';
+import './fancybox.umd.js';
+import './map/raphael.min.js';
+import './map/jquery.mapael.js';
+import './map/world_countries.js';
+import './main.js';

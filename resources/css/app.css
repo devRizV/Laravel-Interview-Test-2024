@@ -1,3 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './animate.css';
+@import './bootstrap.min.css';
+@import './icon.css';
+@import './slick.css';
+@import './select2.min.css';
+@import './sweetalert.css';
+@import './flatpickr.min.css';
+@import './fancybox.css';
+@import './dashboard.css';
+

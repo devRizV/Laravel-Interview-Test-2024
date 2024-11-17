@@ -48,7 +48,7 @@
         <div class="loginForm__right loginForm__bg " style="background-image: url(html/assets/img/login.jpg);">
             <div class="loginForm__right__logo">
                 <div class="loginForm__logo">
-                    <a href="index.html"><img src="html/assets/img/logo.webp" alt=""></a>
+                    <a href="{{ route('login') }}"><img src="html/assets/img/logo.webp" alt=""></a>
                 </div>
             </div>
         </div>

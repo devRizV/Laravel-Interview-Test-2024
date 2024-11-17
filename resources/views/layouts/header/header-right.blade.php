@@ -10,7 +10,11 @@
                 <div class="dashboard__header__author">
                     <a href="javascript:void(0)" class="dashboard__header__author__flex flex-btn">
                         <div class="dashboard__header__author__thumb">
-                            <img src="{{ asset('storage/user.avif') }}" alt="authorImg">
+                            @guest
+                                <img src="html/assets/img/guest_user.jfif" alt="authorImg">
+                            @else
+                                <img src="html/assets/img/author_nav_new.jpg" alt="authorImg">
+                            @endguest
                         </div>
                     </a>
                     <div class="dashboard__header__author__wrapper">

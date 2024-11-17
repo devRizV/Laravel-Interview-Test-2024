@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Country;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,14 @@ class StateFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->state();
+        $stateCode = substr($name, 0, 3);
+
         return [
-            //
+            'name' => $name,
+            'state_code' => $stateCode,
+            'country_id' => fn() => Country::inRandomOrder()->first()->id,
+            'user_id' => fn() => User::inRandomOrder()->first()->id,
         ];
     }
 }

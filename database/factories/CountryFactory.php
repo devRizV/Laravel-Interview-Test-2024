@@ -18,7 +18,9 @@ class CountryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->unique()->country(),
+            'country_code' => $this->faker->unique()->countryCode(),
+            'user_id' => fn() => User::inRandomOrder()->first()->id,
         ];
     }
 }

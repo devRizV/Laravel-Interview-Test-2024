@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class City extends Model
 {
+    use HasFactory;
 
     protected $fillables = [
         'name',
@@ -24,11 +26,11 @@ class City extends Model
     {
         // Slug while 
         static::creating(function ($cities) {
-            $cities->slug = $this->generateUniqueSlug($cities->name);
+            $cities->slug = $cities->generateUniqueSlug($cities->name);
         });
 
         static::updating(function ($cities) {
-            $cities->slug = $this->generateUniqueSlug($cities->name);
+            $cities->slug = $cities->generateUniqueSlug($cities->name);
         });
     }
 

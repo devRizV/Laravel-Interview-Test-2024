@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 
 class State extends Model
 {
+    use HasFactory;
 
     protected $fillables = [
         'name',
@@ -28,12 +30,12 @@ class State extends Model
     protected static function booted()
     {
         // Slug while 
-        static::creating(function ($states) {
-            $states->slug = $this->generateUniqueSlug;($states->name);
+        static::creating(function ($state) {
+            $state->slug = $state->generateUniqueSlug($state->name);
         });
 
-        static::updating(function ($states) {
-            $states->slug = $this->generateUniqueSlug($states->name);
+        static::updating(function ($state) {
+            $state->slug = $state->generateUniqueSlug($state->name);
         });
     }
 

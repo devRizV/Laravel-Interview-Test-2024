@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->string('country_code', 2)->unique();
+            $table->string('flag')->nullable();
             $table->foreignId('user_id')->constrained()->nullOnDelete();
             $table->timestamps();
         });

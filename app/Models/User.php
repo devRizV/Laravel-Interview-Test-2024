@@ -50,21 +50,21 @@ class User extends Authenticatable
     }
 
     /**
-     * 
+     *
      * Model Relations
-     * 
+     *
     */
 
     public function countries(): HasMany
     {
         return $this->hasMany(Country::class);
     }
-    
+
     public function cities(): HasMany
     {
         return $this->hasMany(City::class);
     }
-    
+
     public function states(): HasMany
     {
         return $this->hasMany(State::class);

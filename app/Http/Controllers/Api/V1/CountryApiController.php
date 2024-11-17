@@ -14,9 +14,11 @@ class CountryApiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $countries = Country::with('user')->get();
+        $countries = Country::with('user')
+            ->search($request->search)
+            ->paginate(10);
 
         return CountryResource::collection($countries);
     }
@@ -28,10 +30,15 @@ class CountryApiController extends Controller
     {
         $validated = $request->validated();
 
+        if ($request->hasFile('flag')) {
+            $flagPath = $request->file('flag')->store('flag', 'public');
+            $validated['flag'] = $flagPath;
+        }
+
         $country = Country::create($validated);
 
         $country->load('user');
-        
+
         return new ApiResponse($country, "Country has been added successfully.");
     }
 
@@ -40,7 +47,7 @@ class CountryApiController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**

@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class Country extends Model
 {
-    
+
     use HasFactory;
 
     protected $fillables = [
@@ -22,10 +22,24 @@ class Country extends Model
     ];
 
     /**
-     * Slug names as they are being created or updated 
-     */ 
-     
-    protected static function booted() 
+     * Scopes for filtering datasets
+     *
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', '%' . $term . "%");
+    }
+
+    public function scopeFilterByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Slug names as they are being created or updated
+     */
+
+    protected static function booted()
     {
         // Slug while creating country
         static::creating(function($country) {
@@ -39,19 +53,19 @@ class Country extends Model
 
 
     /**
-     * 
+     *
      * Model Relations
-     * 
+     *
     */
 
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function states() : HasMany
     {
         return $this->hasMany(City::class);
     }
-    
+
 }

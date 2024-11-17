@@ -17,9 +17,12 @@ class CountryFactory extends Factory
      */
     public function definition(): array
     {
+        $countryCode = $this->faker->unique()->countryCode();
+        $flag = 'html/assets/img/country_png_flags/' . $countryCode . ".png";
         return [
             'name' => $this->faker->unique()->country(),
             'country_code' => $this->faker->unique()->countryCode(),
+            'flag' => $flag,
             'user_id' => fn() => User::inRandomOrder()->first()->id,
         ];
     }

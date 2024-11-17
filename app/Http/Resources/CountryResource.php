@@ -18,7 +18,7 @@ class CountryResource extends JsonResource
             'id'            => $this->id,
             'name'          => $this->name,
             'slug'          => $this->slug,
-            'flag'          => $this->flag,
+            'flag'          => $this->flag ? asset('storage/' . $this->flag) : null, // Check for flag and send flags location in the storage.
             'country_code'  => $this->country_code,
             'user_id'       => $this->user_id,
             'user'          => $this->whenLoaded('user', function() {

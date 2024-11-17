@@ -24,7 +24,7 @@ class StoreCountryRequest extends FormRequest
         return [
             'name' => "required|string|max:255",
             'country_code' => "required|string|size:2|unique:country,country_code",
-            'flag' => "nullable|image|max:2048",
+            'flag' => "nullable|image|mimes:png,jpg,jpeg,svg|max:2048",
             'user_id' => 'nullable|exists:user,id',
         ];
     }
@@ -42,6 +42,7 @@ class StoreCountryRequest extends FormRequest
             'country_code.required' => 'The country code is required.',
             'country_code.size' => 'The country code must be exactly 2 characters.',
             'flag.image' => 'The flag must be a valid image file.',
+            'flag.mimes' => 'The flag must be a in png, jpg, jpeg or svg format.',
             'flag.max' => 'The flag must not exceed 2 MB in size.',
             'user_id.exists' => 'The selected user does not exist.',
         ];

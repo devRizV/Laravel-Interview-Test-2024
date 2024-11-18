@@ -12,7 +12,7 @@ class State extends Model
 {
     use HasFactory;
 
-    protected $fillables = [
+    protected $fillable = [
         'name',
         'slug',
         'state_code',

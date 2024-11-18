@@ -20,21 +20,14 @@ class CityResource extends JsonResource
             'state_id' => $this->state_id,
             'state' => $this->whenLoaded('state', function() {
                 return [
-                    'id' => $this->id,
-                    'name' => $this->name,
-                    'state_code' => $this->state_code,
-                    'country_id' => $this->country_id,
+                    'id' => $this->state->id,
+                    'name' => $this->state->name,
+                    'state_code' => $this->state->state_code,
+                    'country_id' => $this->state->country_id,
                 ];
             }),
-            'user_id'       => $this->user_id,
-            'user'          => $this->whenLoaded('user', function () {
-                return [
-                    'id'        => $this->user->id,
-                    'name'      => $this->user->name,
-                    'username'  => $this->user->username,
-                    'email'     => $this->user->email,
-                ];
-            }),
+            'user_id' => $this->user_id,
+            'user'    => new UserResource($this->whenLoaded('user')),
         ];
     }
 }

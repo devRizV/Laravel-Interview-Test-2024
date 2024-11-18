@@ -13,10 +13,10 @@ class Country extends Model
 
     use HasFactory;
 
-    protected $fillables = [
+    protected $fillable = [
         'name',
         'slug',
-        'country_code',
+        'code',
         'flag',
         'user_id',
     ];
@@ -33,6 +33,11 @@ class Country extends Model
     public function scopeFilterByUser($query, $userId)
     {
         return $query->where('user_id', $userId);
+    }
+
+    public function scopeSort($query, $sortBy, $order = "ASC")
+    {
+        return $query->when($sortBy, fn($q) => $q->orderBy($sortBy, $order));
     }
 
     /**

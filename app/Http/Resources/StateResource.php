@@ -22,21 +22,14 @@ class StateResource extends JsonResource
             'country_id' => $this->country_id,
             'country' => $this->whenLoaded('country', function() {
                 return [
-                    'id' => $this->id,
-                    'name' => $this->name,
-                    'flag' => $this->flag,
-                    'country_code' => $this->country_code,
+                    'id' => $this->country->id,
+                    'name' => $this->country->name,
+                    'flag' => $this->country->flag,
+                    'code' => $this->country->country_code,
                 ];
             }),
             'user_id'       => $this->user_id,
-            'user'          => $this->whenLoaded('user', function () {
-                return [
-                    'id'        => $this->user->id,
-                    'name'      => $this->user->name,
-                    'username'  => $this->user->username,
-                    'email'     => $this->user->email,
-                ];
-            }),
+            'user'    => new UserResource($this->whenLoaded('user')),
         ];
     }
 }

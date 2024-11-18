@@ -17,7 +17,7 @@ class ApiResponse extends JsonResource
 
     /**
      * Constructor to accept a custom message.
-     * 
+     *
      * @param mixed $resource
      * @param string|null $message
      */

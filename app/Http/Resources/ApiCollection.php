@@ -8,9 +8,19 @@ use Illuminate\Pagination\AbstractPaginator;
 
 class ApiCollection extends ResourceCollection
 {
-
+    /**
+     * The custom message property.
+     *
+     * @var string|null
+     */
     protected $message;
 
+    /**
+     * Constructor to accept a custom message.
+     *
+     * @param mixed $response
+     * @param string|null $message
+     */
     public function __construct($response, $message = null)
     {
         parent::__construct($response);
@@ -31,7 +41,13 @@ class ApiCollection extends ResourceCollection
             'message' => $this->message,
         ];
 
-        // Check if data is paginated or not and add meta data and links 
+        $this->addPaginationDataIfNeeded($response);
+
+        return $response;
+    }
+
+    protected function addPaginationDataIfNeeded($response)
+    {
         if ($this->resource instanceof AbstractPaginator) {
             $response['meta'] = [
                 'total' => $this->total(),
@@ -48,7 +64,5 @@ class ApiCollection extends ResourceCollection
                 'next' => $this->nextPageUrl(),
             ];
         }
-
-        return $response;
     }
 }

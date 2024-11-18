@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCountryRequest;
+use App\Http\Requests\UpdateCountryRequest;
 use App\Http\Resources\ApiCollection;
 use App\Http\Resources\ApiResponse;
 use App\Http\Resources\CountryResource;
 use App\Models\Country;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CountryApiController extends Controller
 {
@@ -50,7 +51,7 @@ class CountryApiController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * 
+     *
      */
     public function store(StoreCountryRequest $request)
     {
@@ -58,7 +59,7 @@ class CountryApiController extends Controller
             $validated = $request->validated();
 
             if ($request->hasFile('flag')) {
-                // get the original extension 
+                // get the original extension
                 $extension = $request->file('flag')->extension();
 
                 // Generate the new file name (same as their country code)
@@ -85,23 +86,73 @@ class CountryApiController extends Controller
                 'error' => $th->getMessage(),
             ], 500);
         }
-        
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Country $country)
     {
+        if (!$country) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Country not found.'
+            ], 404);
+        }
 
+        $country->load('user');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => new CountryResource($country),
+            'message' => 'Country retrieved successfully.'
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCountryRequest $request, Country $country)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            if ($request->hasFile('flag')) {
+                if ($country->flag && Storage::disk('public')->exists($country->flag)) {
+                    Storage::disk('public')->delete($country->flag);
+                }
+
+                // get the images original extension
+                $extension = $request->file('flag')->extension();
+
+                // Generate the new file name (same as their country code)
+                $filename = $validated['code'] . '.' . $extension;
+
+                // store file in the storage
+                $flagPath = $request->file('flag')->storeAs('flag', $filename, 'public');
+
+                $validated['flag'] = $flagPath;
+            }
+
+            $country->update($validated);
+
+            $country->load('user');
+
+            return response()->json([
+                'status' => 'success',
+                'data' => new CountryResource($country),
+                'message' => 'Country information updated successfully.'
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error('Error updating country: ' . $th->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error occured while updating the country.',
+                'error' => $th->getMessage(),
+            ], );
+        }
     }
 
     /**

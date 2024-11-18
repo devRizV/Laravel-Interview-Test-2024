@@ -8,6 +8,28 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CountryResource extends JsonResource
 {
     /**
+     * The custom message property.
+     *
+     * @var string|null
+     */
+    protected $message;
+
+    /**
+     * Constructor to accept a custom message.
+     *
+     * @param mixed $resource
+     * @param string|null $message
+     */
+    public function __construct($resource, $message = null)
+    {
+        // Pass the resource to the parent constructor
+        parent::__construct($resource);
+
+        // Add the custom message to the resource
+        $this->message = $message ?? "Request has been processed successfully.";
+    }
+
+    /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Storage;
 
 class CountryApiController extends Controller
 {
+    public function __construct()
+    {
+        // Apply middleware to all methods except 'index' and 'show'
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -118,7 +124,7 @@ class CountryApiController extends Controller
                 'error' => $th->getMessage(),
             ], 500);
         }
-        
+
     }
 
     /**
@@ -174,7 +180,7 @@ class CountryApiController extends Controller
     public function destroy(Country $country)
     {
         try {
-            // Delete the country flag 
+            // Delete the country flag
             if ($country->flag && Storage::disk('public')->exists($country->flag)) {
                 Storage::disk('public')->delete($country->flag);
             }

@@ -22,6 +22,30 @@ class State extends Model
 
 
     /**
+     * Scopes for filtering datasets
+     *
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', '%' . $term . "%");
+    }
+
+    public function scopeFilterByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function scopeFilterByCountry($query, $countryId)
+    {
+        return $query->where('country_id', $countryId);
+    }
+
+    public function scopeSort($query, $sortBy, $order = "ASC")
+    {
+        return $query->when($sortBy, fn($q) => $q->orderBy($sortBy, $order));
+    }
+
+    /**
      * 
      * Slug names as they are being created or updated 
      * 

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateCountryRequest extends FormRequest
 {
@@ -23,9 +22,9 @@ class UpdateCountryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => "required|string|max:255|unique:countries,name" . $this->country->id,
-            'code' => "required|string|size:2|unique:countries,code" . $this->country->id,
-            'flag' => "nullable|image|mimes:png,jpg,jpeg,svg|max:2048",
+            'name' => "required|string|max:255|unique:countries,name,{$this->country->id}",
+            'code' => "required|string|size:2|unique:countries,code,{$this->country->id}",
+            'flag' => "nullable|file|mimes:png,jpg,jpeg,svg|max:2048",
             'user_id' => "nullable|exists:users,id",
         ];
     }
@@ -40,6 +39,8 @@ class UpdateCountryRequest extends FormRequest
         return [
             'name.required' => 'The country name is required.',
             'name.unique' => 'The country name already exists.',
+            'name.string' => 'The country name must be a string.',
+            'name.max' => 'The country name is too long.',
             'code.required' => 'The country code is required.',
             'code.size' => 'The country code must be exactly 2 characters.',
             'flag.image' => 'The flag must be a valid image file.',

@@ -20,16 +20,16 @@ class CountryApiController extends Controller
     public function index(Request $request)
     {
         try {
-            $sortBy = $request->sort_by ?? "name";
+            $sortBy = $request->sort_by ?? "id";
             $sortOrder = $request->sort_order ?? "ASC";
 
             // Building query
             $countries = Country::with('user:id,name,username,email')
                 ->search($request->search)
                 ->sort($sortBy, $sortOrder);
-
+            $paginate = filter_var($request->paginate, FILTER_VALIDATE_BOOLEAN);
             // Check for pagination
-            $result = $request->has('paginate') && $request->paginate
+            $result = $request->has('paginate') && $paginate
                 ? $countries->paginate(10)
                 : $countries->get();
 
@@ -71,14 +71,14 @@ class CountryApiController extends Controller
                 $validated['flag'] = $flagPath;
             }
 
-            // $country = $request->user()->countries()->create($validated);
-            $country = Country::create($validated);
+            $country = $request->user()->countries()->create($validated);
+            // $country = Country::create($validated);
 
             $country->load('user');
 
             return new ApiResponse($country, "Country has been added successfully.");
         } catch (\Throwable $th) {
-            \Log::error('Error fetching countries: ' . $th->getMessage());
+            \Log::error('Error storing a country: ' . $th->getMessage());
 
             return response()->json([
                 'status' => 'error',
@@ -94,20 +94,31 @@ class CountryApiController extends Controller
      */
     public function show(Country $country)
     {
-        if (!$country) {
+        try {
+            if (!$country) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Country not found.'
+                ], 404);
+            }
+
+            $country->load('user');
+
+            return response()->json([
+                'status' => 'success',
+                'data' => new CountryResource($country),
+                'message' => 'Country retrieved successfully.'
+            ], 200);
+        } catch (\Throwable $th) {
+            \Log::error('Error retrieving country: ' . $th->getMessage());
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Country not found.'
-            ], 404);
+                'message' => 'An error occurred while retrieving the country.',
+                'error' => $th->getMessage(),
+            ], 500);
         }
-
-        $country->load('user');
-
-        return response()->json([
-            'status' => 'success',
-            'data' => new CountryResource($country),
-            'message' => 'Country retrieved successfully.'
-        ]);
+        
     }
 
     /**
@@ -115,6 +126,7 @@ class CountryApiController extends Controller
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
+
         try {
             $validated = $request->validated();
 
@@ -143,7 +155,7 @@ class CountryApiController extends Controller
                 'status' => 'success',
                 'data' => new CountryResource($country),
                 'message' => 'Country information updated successfully.'
-            ]);
+            ], 200);
         } catch (\Throwable $th) {
             \Log::error('Error updating country: ' . $th->getMessage());
 
@@ -151,15 +163,36 @@ class CountryApiController extends Controller
                 'status' => 'error',
                 'message' => 'Error occured while updating the country.',
                 'error' => $th->getMessage(),
-            ], );
+            ], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Country $country)
     {
-        //
+        try {
+            // Delete the country flag 
+            if ($country->flag && Storage::disk('public')->exists($country->flag)) {
+                Storage::disk('public')->delete($country->flag);
+            }
+
+            $country->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'The country record deleted successfully.'
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error("Error deleting the country record:", $th->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occured while deleting the country record.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 }

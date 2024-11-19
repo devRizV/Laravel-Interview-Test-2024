@@ -11,7 +11,7 @@ class StoreStateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,28 @@ class StoreStateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => "required|string|max:255",
+            'state_code' => "required|string|size:3|unique:states,code",
+            'country_id' => 'required|exists:countries,id',
+            'user_id' => 'nullable|exists:users,id',
+        ];
+    }
+
+    /**
+     * Customized error messages.
+     *
+     * @return array<string, mixed>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The state name is required.',
+            'name.string' => 'The state name must be a string.',
+            'name.max' => 'The state name is too long.',
+            'state_code.required' => 'The state code is required.',
+            'state_code.size' => 'The state code must be exactly 3 characters.',
+            'country_id.exists' => 'The selected country does not exist.',
+            'user_id.exists' => 'The selected user does not exist.',
         ];
     }
 }

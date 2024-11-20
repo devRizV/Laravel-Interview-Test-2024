@@ -13,15 +13,9 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $countries = Country::with('user:id,name,username,email')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('country.index', compact('countries'));
     }
 
     /**
@@ -29,7 +23,41 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            if ($request->hasFile('flag')) {
+                // get the original extension
+                $extension = $request->file('flag')->extension();
+
+                // Generate the new file name (same as their country code)
+                $filename = $validated['code'] . '.' . $extension;
+
+                // store file in the storage
+                $flagPath = $request->file('flag')->storeAs('flag', $filename, 'public');
+
+                $validated['flag'] = $flagPath;
+            }
+
+            $country = $request->user()->countries()->create($validated);
+            // $country = Country::create($validated);
+
+            $country->load('user');
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $country,
+                'message' => "Country has been added successfully.",
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error('Error storing a country: ' . $th->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while storing a country.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -53,7 +81,44 @@ class CountryController extends Controller
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        //
+        try {
+            $validated = $request->validated();
+
+            if ($request->hasFile('flag')) {
+                if ($country->flag && Storage::disk('public')->exists($country->flag)) {
+                    Storage::disk('public')->delete($country->flag);
+                }
+
+                // get the images original extension
+                $extension = $request->file('flag')->extension();
+
+                // Generate the new file name (same as their country code)
+                $filename = $validated['code'] . '.' . $extension;
+
+                // store file in the storage
+                $flagPath = $request->file('flag')->storeAs('flag', $filename, 'public');
+
+                $validated['flag'] = $flagPath;
+            }
+
+            $country->update($validated);
+
+            $country->load('user');
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $country,
+                'message' => 'Country information updated successfully.'
+            ], 200);
+        } catch (\Throwable $th) {
+            \Log::error('Error updating country: ' . $th->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error occured while updating the country.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 
     /**

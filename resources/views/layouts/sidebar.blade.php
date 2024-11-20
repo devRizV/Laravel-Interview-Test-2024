@@ -14,16 +14,16 @@
                                         <input class="form--control  w-100" type="text" placeholder="Search here..." id="search_sidebarList">
                                     </div>
                                     <ul class="dashboard__bottom__list dashboard-list">
-                                        <li class="dashboard__bottom__list__item has-children show open active">
+                                        <li class="dashboard__bottom__list__item show open {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                             <a href="{{ route('home') }}"><i class="material-symbols-outlined">dashboard</i> <span class="icon_title">Dashboard</span></a>
+                                        </li>
+                                        <li class="dashboard__bottom__list__item has-children {{ request()->routeIs('countries.index') ? 'active' : '' }}">
+                                            <a href="javascript:void(0)"><span class="icon_title">Country</span></a>
                                             <ul class="submenu">
-                                                <li class="dashboard__bottom__list__item selected">
-                                                    <a href="index.html">Default</a>
+                                                <li class="dashboard__bottom__list__item">
+                                                    <a href="{{ route('countries.index') }}">Country List</a>
                                                 </li>
                                             </ul>
-                                        </li>
-                                        <li class="dashboard__bottom__list__item has-children">
-                                            <a href="basic_form.html"><span class="icon_title">Form</span></a>
                                         </li>
                                         <li class="dashboard__bottom__list__item has-children">
                                             <a href="table.html"><span class="icon_title">Table</span></a>
@@ -31,22 +31,18 @@
                                         <li class="dashboard__bottom__list__item has-children">
                                             <a href="javascript:void(0)"><i class="material-symbols-outlined">group</i> <span class="icon_title">User</span></a>
                                             <ul class="submenu">
-                                                <li class="dashboard__bottom__list__item">
-                                                    <a href="sign_in.html">Login</a>
-                                                </li>
-                                                <li class="dashboard__bottom__list__item">
-                                                    <a href="sign_up.html">Register</a>
-                                                </li>
-                                                <li class="dashboard__bottom__list__item">
-                                                    <a href="forgot_password.html">Reset Password</a>
-                                                </li>
-                                                <li class="dashboard__bottom__list__item">
-                                                    <a href="mail_varification.html">Mail Varification</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="dashboard__bottom__list__item">
-                                            <a href="javascript:void(0)"><i class="material-symbols-outlined">logout</i> <span class="icon_title">Log Out</span></a>
+                                                @guest
+                                                    <li class="dashboard__bottom__list__item">
+                                                        <a href="{{ route('login') }}">Sign In</a>
+                                                    </li>
+                                                    <li class="dashboard__bottom__list__item">
+                                                        <a href="{{ route('register') }}">Sign Up</a>
+                                                    </li>
+                                                @else
+                                                    <li class="dashboard__bottom__list__item">
+                                                        <a href="{{ route('logout') }}"><i class="material-symbols-outlined">logout</i> <span class="icon_title">Log Out</span></a>
+                                                    </li>
+                                                @endguest
                                         </li>
                                     </ul>
                                 </div>

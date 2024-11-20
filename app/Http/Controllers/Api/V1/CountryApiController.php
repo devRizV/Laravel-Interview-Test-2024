@@ -124,7 +124,6 @@ class CountryApiController extends Controller
                 'error' => $th->getMessage(),
             ], 500);
         }
-
     }
 
     /**

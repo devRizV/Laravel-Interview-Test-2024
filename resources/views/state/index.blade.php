@@ -50,7 +50,9 @@
                 let sortBy = "name";
                 let sortOrder = "asc";
                 let countryData = [];
+                
                 fetchStates();
+                fetchCountryData($("#country_name"));
 
                 function fetchStates(page = 1) {
                     const url = `/api/v1/states`;
@@ -192,6 +194,8 @@
                 $(document).on("click", ".openEditModal", function () {
                     const state = $(this).data('state');
                     openEditModal(state);
+                    fetchCountryData($("#country_name_update"));
+                    initSelect2($(".select2_update"));
                 });
 
                 function openEditModal(state) {
@@ -292,10 +296,9 @@
                             handleMessage("success", "State was not deleted. Action cancelled.")
                         }
                 });
-                fetchCountryData();
-
-                function fetchCountryData() {
+                function fetchCountryData(element) {
                     const url = `/api/v1/countries`;
+                    console.log(element);
                     $.ajax({
                         type: "GET",
                         url: url,
@@ -305,15 +308,14 @@
                         dataType: "json",
                         success: function (response) {
                             countryData = response.data;
-                            populateOptions(countryData);
+                            populateOptions(countryData, element);
                         }
                     });
                 }
 
-                function populateOptions(countries) {
-                    const select = $('#country_name');
+                function populateOptions(countries, element) {
                     countries.forEach(country => {
-                        select.append(`
+                        element.append(`
                             <option value="${country.id}">${country.name}</option>
                         `);
                     });

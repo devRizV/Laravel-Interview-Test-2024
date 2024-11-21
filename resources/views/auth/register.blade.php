@@ -14,6 +14,7 @@
                 <div class="loginForm__wrapper mt-4">
                     <!-- Form -->
                     <form method="POST" action="{{ route('register') }}" class="custom_form">
+                        @csrf
                         <div class="single_input">
                             <label class="label_title" for="name">Name</label>
                             <div class="include_icon">
@@ -45,7 +46,7 @@
                         <div class="single_input">
                             <label class="label_title" for="password-confirm">Confirm Password</label>
                             <div class="include_icon">
-                                <input class="form--control radius-5" type="password" placeholder="confirm password" id="password-confirma" name="password-confirmation" @error('name') is-invalid @enderror" required autocomplete="new-password" autofocus>
+                                <input class="form--control radius-5" type="password" placeholder="confirm password" id="password_confirmation" name="password_confirmation" @error('name') is-invalid @enderror" required autocomplete="new-password" autofocus>
                                 <div class="icon"><span class="material-symbols-outlined">lock</span></div>
                             </div>
                         </div>

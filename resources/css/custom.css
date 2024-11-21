@@ -1,0 +1,29 @@
+/* Customize the outer container */
+.select2-container {
+    width: 100% !important; /* Ensure it fits within its container */
+}
+
+/* Customize the selection box */
+.select2-container .select2-selection {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    height: 38px;
+    padding: 5px;
+}
+
+/* Customize the dropdown */
+.select2-container .select2-dropdown {
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Customize the placeholder text */
+.select2-container .select2-selection__placeholder {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Customize hover or focus */
+.select2-container .select2-selection:hover {
+    border-color: #007bff;
+}

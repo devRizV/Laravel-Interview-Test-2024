@@ -11,9 +11,15 @@ window.$ = jQuery;
 select2($);
 
 $(document).ready(function () {
-    const parentDiv = $(".select2").parent();
-    $('.select2').select2({
-        dropdownParent: parentDiv,
-        placeholder: 'Select an option',
-    });
+
+    function initSelect2(element) {
+        const parentDiv = element.parent();
+        element.select2({
+            dropdownParent: parentDiv,
+            placeholder: 'Select an option',
+        });
+    }
+    initSelect2($(".select2"));
+    window.initSelect2 = initSelect2;
 });
+

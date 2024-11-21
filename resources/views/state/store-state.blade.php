@@ -1,46 +1,3 @@
-<style>
-/* Customize the outer container */
-.select2-container {
-    width: 100% !important; /* Ensure it fits within its container */
-}
-
-/* Customize the selection box */
-.select2-container .select2-selection {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    height: 38px;
-    padding: 5px;
-}
-
-/* Customize the dropdown */
-.select2-container .select2-dropdown {
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Customize the placeholder text */
-.select2-container .select2-selection__placeholder {
-    color: #6c757d;
-    font-style: italic;
-}
-
-/* Customize selected items (for multi-select) */
-.select2-container .select2-selection__choice {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 2px 5px;
-    margin: 2px;
-}
-
-/* Customize hover or focus */
-.select2-container .select2-selection:hover {
-    border-color: #007bff;
-}
-
-</style>
-
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStateModal">
     Add a state
 </button>
@@ -76,7 +33,7 @@
                                             <span class="" role="alert" id="code_error"></span>
                                         </div>
                                         <div class="form__input__single">
-                                            <div>
+                                            <div class="coutnry-select-container">
                                                 <label for="country_name" class="form__input__single__label">Country Name</label>
                                                 <select name="country_id" id="country_name" class="select2">
                                                     <option>select a country</option>

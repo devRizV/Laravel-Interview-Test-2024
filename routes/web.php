@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,8 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
+// Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
 Route::middleware(['auth', 'verified'])->get('/home', [HomeController::class, 'index'])->name('home');
 

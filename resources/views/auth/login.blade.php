@@ -12,7 +12,7 @@
                 </div>
                 <div class="loginForm__wrapper mt-4">
                     <!-- Form -->
-                    <form form method="POST" action="{{npm  route('login') }}" class="custom_form">
+                    <form form method="POST" action="{{ route('login') }}" class="custom_form">
                         @csrf
                         <div class="single_input">
                             <label class="label_title">Email or Username</label>
@@ -65,4 +65,7 @@
     </div>
 </section>
 <!-- login Area end -->
+
+
+
 @endsection

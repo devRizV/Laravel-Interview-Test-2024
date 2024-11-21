@@ -38,17 +38,22 @@
                     <div class="dashboard__contents__wrapper">
                         @auth
                             @include('layouts.sidebar')
-                        @endauth
 
-                        <div class="dashboard__right">
+                            <div class="dashboard__right">
 
+                                @include('layouts.header.header-container')
+
+                                <main class="py-4">
+                                    @yield('content')
+                                </main>
+
+                            </div>
+                        @else
                             @include('layouts.header.header-container')
-
                             <main class="py-4">
                                 @yield('content')
                             </main>
-
-                        </div>
+                        @endauth
                     </div>
                 </div>
             </div>

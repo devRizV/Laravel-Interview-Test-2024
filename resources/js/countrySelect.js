@@ -1414,7 +1414,7 @@
 		i: "zw"
 	}, {
         	n: '', // No country selected
-        	i: '' 
+        	i: ''
     }], function(i, c) {
 		c.name = c.n;
 		c.iso2 = c.i;

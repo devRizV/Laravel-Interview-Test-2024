@@ -12,7 +12,7 @@
                 </div>
                 <div class="loginForm__wrapper mt-4">
                     <!-- Form -->
-                    <form form method="POST" action="{{ route('login') }}" class="custom_form">
+                    <form form method="POST" action="{{npm  route('login') }}" class="custom_form">
                         @csrf
                         <div class="single_input">
                             <label class="label_title">Email or Username</label>
@@ -50,13 +50,6 @@
                         </div>
                         <div class="btn_wrapper single_input">
                             <button class="cmn_btn w-100 radius-5" type="submit">Sign In</button>
-                        </div>
-                        <div class="btn-wrapper mt-4">
-                            <p class="loginForm__wrapper__signup"><span>Don’t have an account ? </span> <a href="{{ route('register') }}" class="loginForm__wrapper__signup__btn">Sign Up</a></p>
-                            <div class="loginForm__wrapper__another d-flex flex-column gap-2 mt-3">
-                                <a href="javascript:void(0)" class="loginForm__wrapper__another__btn radius-5 w-100"><img src="html/assets/img/icon/googleIocn.svg" alt="" class="icon"> Login With Google</a>
-                                <a href="javascript:void(0)" class="loginForm__wrapper__another__btn radius-5 w-100"><img src="html/assets/img/icon/fbIcon.svg" alt="" class="icon">Login With Facebook</a>
-                            </div>
                         </div>
                     </form>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
+use Illuminate\Support\Facades\Storage;
 
 class CountryController extends Controller
 {
@@ -13,9 +14,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $countries = Country::with('user:id,name,username,email')->get();
-
-        return view('country.index', compact('countries'));
+       return view('country.index');
     }
 
     /**
@@ -40,7 +39,6 @@ class CountryController extends Controller
             }
 
             $country = $request->user()->countries()->create($validated);
-            // $country = Country::create($validated);
 
             $country->load('user');
 
@@ -126,6 +124,26 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        try {
+            // Delete the country flag
+            if ($country->flag && Storage::disk('public')->exists($country->flag)) {
+                Storage::disk('public')->delete($country->flag);
+            }
+
+            $country->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'The country record deleted successfully.'
+            ]);
+        } catch (\Throwable $th) {
+            \Log::error("Error deleting the country record:", $th->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occured while deleting the country record.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
     }
 }

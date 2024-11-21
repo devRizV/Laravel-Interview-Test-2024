@@ -25,8 +25,21 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li class="dashboard__bottom__list__item has-children">
-                                            <a href="table.html"><span class="icon_title">Table</span></a>
+                                        <li class="dashboard__bottom__list__item has-children {{ request()->routeIs('states.index') ? 'active' : '' }}">
+                                            <a href="javascript:void(0)"><span class="icon_title">State</span></a>
+                                            <ul class="submenu">
+                                                <li class="dashboard__bottom__list__item">
+                                                    <a href="{{ route('states.index') }}">State List</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dashboard__bottom__list__item has-children {{ request()->routeIs('cities.index') ? 'active' : '' }}">
+                                            <a href="javascript:void(0)"><span class="icon_title">City</span></a>
+                                            <ul class="submenu">
+                                                <li class="dashboard__bottom__list__item">
+                                                    <a href="{{ route('states.index') }}">City List</a>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li class="dashboard__bottom__list__item has-children">
                                             <a href="javascript:void(0)"><i class="material-symbols-outlined">group</i> <span class="icon_title">User</span></a>

@@ -2,13 +2,19 @@ import './bootstrap';
 
 import jQuery from 'jquery';
 
-import 'select2/dist/css/select2.min.css'; // Import Select2 CSS
+// import 'select2/dist/css/select2.min.css'; // Import Select2 CSS
+
 
 import select2 from 'select2';
+
+import DataTable from 'datatables.net-dt';
+
+import "./custom.js"
 
 window.$ = jQuery;
 
 select2($);
+
 
 $(document).ready(function () {
 
@@ -21,5 +27,6 @@ $(document).ready(function () {
     }
     initSelect2($(".select2"));
     window.initSelect2 = initSelect2;
+    
 });
 

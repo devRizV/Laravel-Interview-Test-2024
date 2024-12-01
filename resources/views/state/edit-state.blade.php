@@ -30,11 +30,11 @@
                                             <div class="form__input__single">
                                                 <div>
                                                     <label for="country_name_update" class="form__input__single__label">Country Name</label>
-                                                    <select name="country_id" id="country_name_update" class="select2_update" data-select="${state.country.id}">
+                                                    <select name="country_id" id="country_name_update" class="select2_update" data-selected="${state.country.id}">
                                                         <option>select a country</option>
                                                         {{-- country list will be appended here. --}}
                                                     </select>
-                                                    <span class="" role="alert" id="flag"></span>
+                                                    <span class="flag" role="alert" id="flag"></span>
                                                     <span class="" role="alert" id="country_name_error"></span>
                                                 </div>
                                             </div>

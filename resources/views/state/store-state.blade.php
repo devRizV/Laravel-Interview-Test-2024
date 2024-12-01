@@ -13,7 +13,7 @@
                                 <h4 class="dashboard__card__header__title">Add a state</h4>
                             </div>
                             <div class="dashboard__card__header">
-                                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button class="btn-close close" id="close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                         </div>
                         <div class="dashboard__card__inner mt-4">
@@ -33,24 +33,29 @@
                                             <span class="" role="alert" id="code_error"></span>
                                         </div>
                                         <div class="form__input__single">
-                                            <div class="coutnry-select-container">
+                                            <div class="country-select-container">
                                                 <label for="country_name" class="form__input__single__label">Country Name</label>
                                                 <select name="country_id" id="country_name" class="select2">
                                                     <option>select a country</option>
                                                     {{-- country list will be appended here. --}}
                                                 </select>
-                                                <span class="" role="alert" id="flag"></span>
+                                                <span class="flag" role="alert" id="flag"></span>
 
                                                 <span class="" role="alert" id="country_name_error"></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-end mt-5">
+                                    <div class="d-flex justify-content-between mt-5">
+                                        <div class="form__input__single">
+                                            <button id="reset-form" type="button" class="resetForm form__control cmn_btn btn_small btn_bg_danger radius-5">
+                                                Reset
+                                            </button>
+                                        </div>
                                         <div class="btn_wrapper single_input">
-                                            <button id="reset-form" type="button" class="cmn_btn btn_small btn_bg_danger radius-5" data-bs-dismiss="modal" aria-label="Close">
+                                            <button id="reset-form" type="button" class="resetForm cmn_btn btn_small btn_bg_danger radius-5" data-bs-dismiss="modal" aria-label="Close">
                                                 Cancel
                                             </button>
-                                            <button id="submit-store-form" type="button" class="cmn_btn btn_small radius-5" data-bs-dismiss="modal" aria-label="Close">
+                                            <button id="submit-store-form" type="button" class="cmn_btn btn_small radius-5">
                                                 Save State
                                             </button>
                                         </div>

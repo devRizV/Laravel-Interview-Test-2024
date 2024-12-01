@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCountryModal">
+<button type="button" class="cmnBtn btn_1 btn_bg_blue btn_small radius-5" data-bs-toggle="modal" data-bs-target="#addCountryModal">
     Add a Country
 </button>
 
@@ -34,13 +34,26 @@
                                         </div>
                                         <div class="form__input__single">
                                             <label for="flag" class="form__input__single__label">Country Flag</label>
-                                            <input type="file" id="flag" name="flag" class="form__control radius-5">
-                                            <span class="" role="alert" id="flag_error"></span>
+                                            <div class="file__input">
+                                                <label class="file_browse_button" for="flag">
+                                                    Browse
+                                                </label>
+                                                <input type="file" id="flag" name="flag" class="form__control radius-5">
+                                            </div>
+                                            <span class="flag" role="alert" id="flag_error"></span>
                                         </div>
+                                        <div class="form__input__single">
+                                        </div>
+                                        
                                     </div>
-                                    <div class="d-flex justify-content-end mt-5">
+                                    <div class="d-flex justify-content-between mt-5">
+                                        <div class="form__input__single">
+                                            <button id="reset-form" type="button" class="resetForm form__control cmn_btn btn_small btn_bg_danger radius-5">
+                                                Reset
+                                            </button>
+                                        </div>
                                         <div class="btn_wrapper single_input">
-                                            <button id="reset-form" type="button" class="cmn_btn btn_small btn_bg_danger radius-5" data-bs-dismiss="modal" aria-label="Close">
+                                            <button type="button" class="resetForm cmn_btn btn_small btn_bg_danger radius-5" data-bs-dismiss="modal" aria-label="Close">
                                                 Cancel
                                             </button>
                                             <button id="submit-store-form" type="button" class="cmn_btn btn_small radius-5" data-bs-dismiss="modal" aria-label="Close">

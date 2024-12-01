@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="updateCountryModalLabel" aria-hidden="true">
-        {{-- modal content here --}}
-    </div>
         <div class="dashboard__body">
             <div class="" id="show-message">
                 {{-- message shown here --}}
@@ -22,10 +19,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>
-                                            Country Name
-                                        </span>
-                                        </th>
+                                        <th>Country Name</th>
                                         <th>Country Slug</th>
                                         <th>Country Code</th>
                                         <th>Country Flag</th>
@@ -34,7 +28,7 @@
                                 </thead>
                                 <tbody>
                                     {{-- Country list will be appended here. --}}
-                                </tbody>
+                                </tbody> 
                             </table>
                         </div>
                     </div>
@@ -45,20 +39,21 @@
                 </div>
             </div>
         </div>
-
         <script type="module">
             $(document).ready(function () {
                 let currentPage = 1;
-                let sortBy = "name";
-                let sortOrder = "asc";
+                let sortBy = "created_at";
+                let sortOrder = "desc";
+
                 fetchCountries();
+                resetForm('.resetForm');
                 function fetchCountries(page = 1) {
                     const url = `/api/v1/countries`;
                     $.ajax({
                         type: "GET",
                         url: url,
                         data: {
-                            paginate: true,
+                            paginate: false,
                             page: page,
                             sort_by: sortBy,
                             sortOrder: sortOrder,
@@ -66,7 +61,7 @@
                         dataType: "json",
                         success: function (response) {
                             populateTable(response.data);
-                            setupPagination(response.meta);
+                            table = $('#countries-table').DataTable();
                         },
                         error: function (xhr) {
 
@@ -74,9 +69,12 @@
                     });
                 }
 
+
+
                 function populateTable(countries) {
                     const tbody = $("#countries-table tbody");
                     tbody.empty(); // Clear previous content
+
                     countries.forEach((country, index) => {
                         tbody.append(`
                             <tr>
@@ -104,29 +102,13 @@
                     });
                 }
 
-                 // Setup pagination links
-                function setupPagination(meta) {
-                    const pagination = $("#pagination");
-                    pagination.empty(); // Clear previous links
-                    for (let i = 1; i <= meta.last_page; i++) {
-                        pagination.append(`
-                            <button class="page-btn cmn_btn btn_small radius-5 m-1" data-page="${i}">
-                                <span>${i === meta.current_page ? `<strong>${i}</strong>` : i}</span>
-                            </button>
-                        `);
-                    }
+                function resetForm(resetButton) {
+                    $(document).on('click', resetButton, function () {
+                        const form = $(this).closest('form')[0];
+                        form.reset();
+                    });
                 }
-                // Event handler for pagination buttons
-                $(document).on("click", ".page-btn", function () {
-                    currentPage = $(this).data("page");
-                    fetchCountries(currentPage);
-                });
-
-                $(document).on('click', '#reset-form', function () {
-                    const form = $(this).closest('form')[0];
-                    form.reset();
-                });
-
+                
                 // Handle form submission
                 $('#submit-store-form').on('click', function (e) {
                     e.preventDefault();
@@ -294,7 +276,12 @@
                             handleMessage("success", "Country was not deleted. Action cancelled.")
                         }
                 });
+
             });
+            
+            let table = new DataTable('#dataTable', {});
         </script>
+
+        
 
 @endsection

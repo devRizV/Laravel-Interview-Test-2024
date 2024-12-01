@@ -1,21 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="updateStateModalLabel" aria-hidden="true">
-        {{-- modal content here --}}
-    </div>
+        
         <div class="dashboard__body">
             <div class="" id="show-message">
-                {{-- message shown here --}}
+                {{-- Status message shown here --}}
             </div>
-            <div id="add-state-section" class="absolute">
+            <div id="add-state-section">
                 <div class="dashboard__inner__item dashboard__card bg__white padding-20 radius-10">
                     <div class="d-flex justify-content-between">
                         <h4 class="dashboard__inner__item__header__title">State List</h4>
                         @include('state.store-state')
                     </div>
                      <!-- Table Design One -->
-                    <div class="tableStyle_one mt-4">
+                    <div class="">
                         <div class="table_wrapper">
                             <!-- Table -->
                             <table id="states-table">
@@ -53,6 +51,7 @@
                 
                 fetchStates();
                 fetchCountryData($("#country_name"));
+                resetForm(".resetForm");
 
                 function fetchStates(page = 1) {
                     const url = `/api/v1/states`;
@@ -60,7 +59,7 @@
                         type: "GET",
                         url: url,
                         data: {
-                            paginate: true,
+                            paginate: false,
                             page: page,
                             sort_by: sortBy,
                             sortOrder: sortOrder,
@@ -68,7 +67,7 @@
                         dataType: "json",
                         success: function (response) {
                             populateTable(response.data);
-                            setupPagination(response.meta);
+                            $('#states-table').DataTable();
                         }
                     });
                 }
@@ -104,29 +103,6 @@
                     });
                 }
 
-                // Setup pagination links
-                function setupPagination(meta) {
-                    const pagination = $("#pagination");
-                    pagination.empty(); // Clear previous links
-                    for (let i = 1; i <= meta.last_page; i++) {
-                        pagination.append(`
-                            <button class="page-btn cmn_btn btn_small radius-5 m-1" data-page="${i}">
-                                <span>${i === meta.current_page ? `<strong>${i}</strong>` : i}</span>
-                            </button>
-                        `);
-                    }
-                }
-                // Event handler for pagination buttons
-                $(document).on("click", ".page-btn", function () {
-                    currentPage = $(this).data("page");
-                    fetchStates(currentPage);
-                });
-
-                $(document).on('click', '#reset-form', function () {
-                    const form = $(this).closest('form')[0];
-                    form.reset();
-                });
-
                 // Handle form submission
                 $('#submit-store-form').on('click', function (e) {
                     e.preventDefault();
@@ -149,11 +125,11 @@
                         processData: false,
                         contentType: false,
                         success: function (response) {
-                            handleMessage(response.status, response.message);
+                            handleStatusMessage(response.status, response.message);
                             form.reset(); // Reset the form
-                            const modalElement = document.getElementById('editModal');
-                            const modal = new bootstrap.Modal(modalElement);
-                            modal.hide();
+                            $("#flag").empty();
+                            $('.close').click();
+                            $('#editModal').modal('hide');
                             fetchStates();
                         },
                         error: function (xhr, status, error) {
@@ -161,14 +137,13 @@
                             if (xhr.status === 422) {
                                 // Validation errors
                                 let errors = xhr.responseJSON.errors;
-
                                 for (let field in errors) {
                                     let input = $(`[name="${field}"]`);
                                     input.addClass('is-invalid');
                                     input.after(`<span class="error-message alert alert-danger">${errors[field][0]}</span>`);
                                 }
                             } else {
-                                handleMessage(status, xhr.responseJSON.message);
+                                handleStatusMessage(status, xhr.responseJSON.message);
                             }
                         }
                     });
@@ -181,7 +156,7 @@
                         $('#code_error').append("State code field cannot be empty!!");
                     }
                 }
-                function handleMessage(status, message) {
+                function handleStatusMessage(status, message) {
                     const showError = $("#show-message");
                     showError.empty();
                     if (status === "error") {
@@ -205,6 +180,7 @@
                     const modal = new bootstrap.Modal(modalElement);
                     modal.show();
                 }
+                
 
                 $(document).on('click', '#submit-update-form', function (e) {
                     e.preventDefault();
@@ -232,6 +208,7 @@
                         contentType: false,
                         success: function (response) {
                             handleMessage(response.status, response.message);
+                            $('.close').click();
                             fetchStates();
                         },
                         error: function (xhr, status, error) {
@@ -242,7 +219,6 @@
                             if (xhr.status === 422) {
                                 // Validation errors
                                 let errors = xhr.responseJSON.errors;
-
                                 for (let field in errors) {
                                     let input = $(`[name="${field}"]`);
                                     input.addClass('is-invalid');
@@ -296,9 +272,9 @@
                             handleMessage("success", "State was not deleted. Action cancelled.")
                         }
                 });
+
                 function fetchCountryData(element) {
                     const url = `/api/v1/countries`;
-                    console.log(element);
                     $.ajax({
                         type: "GET",
                         url: url,
@@ -308,29 +284,38 @@
                         dataType: "json",
                         success: function (response) {
                             countryData = response.data;
-                            populateOptions(countryData, element);
+                            populateCountryOptions(countryData, element);
                         }
                     });
                 }
 
-                function populateOptions(countries, element) {
+                function populateCountryOptions(countries, element) {
                     countries.forEach(country => {
+                        const selected =  element.data('selected') == country.id;
                         element.append(`
-                            <option value="${country.id}">${country.name}</option>
+                            <option value="${country.id}" ${selected ? 'selected' : '' }>${country.name}</option>
                         `);
+                        if (selected) {
+                            $('.flag').empty().append(`<img src="{{asset('storage/${country.flag}')}}" alt="${country.flag} flag">`);
+                        }
                     });
                 }
 
-                $(document).on('change', '#country_name', function () {
-                    const id = $(this).val();
-                    const flag = $("#flag");
+                toggleCountryFlag('#country_name');
+                toggleCountryFlag('#country_name_update');
 
-                    countryData.forEach((country, index) => {
-                        if (country.id == id) {
-                            flag.empty().append(`<img src="{{asset('storage/${country.flag}')}}" alt="${country.flag} flag">`);
-                        }
+                function toggleCountryFlag(button) {
+                    $(document).on('change', button, function () {
+                        const id = $(this).val();
+                        const flag = $(".flag");
+    
+                        countryData.forEach((country, index) => {
+                            if (country.id == id) {
+                                flag.empty().append(`<img src="{{asset('storage/${country.flag}')}}" alt="${country.flag} flag">`);
+                            }
+                        });
                     });
-                });
+                }
 
             });
         </script>

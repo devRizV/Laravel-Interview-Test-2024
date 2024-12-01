@@ -30,6 +30,9 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+            {{-- modal content here --}}
+        </div>
         <!-- preloader area end -->
             <!-- Dashboard start -->
             <div class="body-overlay"></div>
